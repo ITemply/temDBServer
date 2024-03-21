@@ -22,18 +22,17 @@ app.get('/databaseView', function(req, res){
   res.render('databaseView')
 })
 
+app.get('/requestSender', function(req, res){
+  res.send('Depricated')
+})
+
 app.post('/requestSend', function(req, res){
   console.log('Sending [POST]: requestSend')
-  console.log(req.body)
   io.sockets.emit('dataRequest', JSON.stringify(req.body))
-  res.send('Request Sent, Check Database for Results/Updates')
+  res.send('Request Sent, Check Database for Results/Updates\n\n' + JSON.stringify(req.body))
 })
 
 io.on('connection', function(socket) {  
-  socket.on('sendingBack', function(data){
-    console.log('Sending back: ' + data)
-  })
-
   socket.on('sendPayload', function(data){
     io.emit('dataRequest', JSON.stringify(data))
   })
