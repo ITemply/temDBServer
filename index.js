@@ -14,10 +14,20 @@ app.use(bodyParser.urlencoded({ extended: false }))
 app.use(express.static(path.join(__dirname, 'public')))
 
 app.get('/', (req, res) => {
-    console.log('Sending [GET]: Index')
-    res.render('index')
+  console.log('Sending [GET]: Index')
+  res.render('index')
 })
 
 server.listen(3000, () => {
-    console.log('temDB has started. Port: 3000')
+  console.log('temDB has started. Port: 3000')
+})
+
+io.on('connection', function(socket) {
+  socket.on('sendingBack', function(data){
+    console.log('Sending back: ' + data)
+  })
+
+  socket.on('sendPayload', function(data){
+    io.emit('dataRequest', JSON.stringify(data))
+  })
 })
