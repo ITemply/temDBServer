@@ -18,11 +18,18 @@ app.get('/', (req, res) => {
   res.render('index')
 })
 
-server.listen(3000, () => {
-  console.log('temDB has started. Port: 3000')
+app.get('/databaseView', function(req, res){
+  res.render('databaseView')
 })
 
-io.on('connection', function(socket) {
+app.post('/requestSend', function(req, res){
+  console.log('Sending [POST]: requestSend')
+  console.log(req.body)
+  io.sockets.emit('dataRequest', JSON.stringify(req.body))
+  res.send('Request Sent, Check Database for Results/Updates')
+})
+
+io.on('connection', function(socket) {  
   socket.on('sendingBack', function(data){
     console.log('Sending back: ' + data)
   })
@@ -30,4 +37,8 @@ io.on('connection', function(socket) {
   socket.on('sendPayload', function(data){
     io.emit('dataRequest', JSON.stringify(data))
   })
+})
+
+server.listen(3000, () => {
+  console.log('temDB has started. Port: 3000')
 })
