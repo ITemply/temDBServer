@@ -50,6 +50,7 @@ app.post('/requestSend', function(req, res){
   finder = setInterval(function(){
     try {
       data = JSON.parse(dataReturnList[i])
+      console.log(dataReturnList)
       if (data['id'] == id) {
         dataReturnList.splice(i, i)
         res.send(data)
@@ -67,7 +68,6 @@ app.post('/requestSend', function(req, res){
 
 io.on('connection', function(socket) {  
   socket.on('dataReturn', function(data){
-    console.log(data)
     dataReturnList.push(data)
   })
 })
